@@ -1,7 +1,7 @@
 {
     "name": "cvsouth/http",
 
-    "description": "Simple HTTP requests with pure PHP",
+    "description": "Simple HTTP requests using pure PHP",
 
     "require": {
 
