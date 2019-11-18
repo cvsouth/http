@@ -16,7 +16,7 @@ function http_get_url($url, $data = [])
 
     else return $url_parts[0];
 }
-function http_get_stream($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
+function http_get_stream($url, $data = [], $headers = [], &$response_headers = [])
 {
     return http_get($url, $data, $headers, $response_headers, true);
 }
