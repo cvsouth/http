@@ -72,7 +72,7 @@ function http_response_headers($response_stream)
 }
 function http_context($method, $data = [], $headers = [])
 {
-    $http = ['method'  => $method, 'header'  => implode("\r\n", $headers)];
+    $http = ['method' => $method, 'header'  => implode("\r\n", $headers)];
 
     if(!empty($data)) $http['content'] = $data;
 
