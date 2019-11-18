@@ -1,0 +1,28 @@
+{
+    "name": "cvsouth/http",
+
+    "description": "Simple HTTP requests with pure PHP",
+
+    "require": {
+
+        "php": "^5.6|^7.2"
+    },
+    "license": "proprietary",
+
+    "authors": [
+        {
+            "name": "Colin South",
+
+            "email": "colin@riseresolution.com"
+        }
+    ],
+    "autoload": {
+
+        "psr-4":
+        {
+            "Cvsouth\\Http\\": "src/"
+        },
+        "files": [ "src/Functions/http.php" ]
+    },
+    "minimum-stability": "dev"
+}
