@@ -43,12 +43,12 @@ function http_post($url, $data = [], $headers = [], &$response_headers = [], $re
     $data = http_build_query($data);
 
     $headers = array_merge(
-        [
-            'Content-Type: application/x-www-form-urlencoded',
+    [
+        'Content-Type: application/x-www-form-urlencoded',
 
-            'Content-Length: ' . strlen($data),
-        ],
-        $headers);
+        'Content-Length: ' . strlen($data),
+    ],
+    $headers);
 
     $context = http_context('POST', $data, $headers);
 
