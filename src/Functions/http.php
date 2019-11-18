@@ -18,7 +18,7 @@ function http_get_url($url, $data = [])
 }
 function http_get_stream($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
 {
-    return http_get($url, $data, $headers, &$response_headers, true);
+    return http_get($url, $data, $headers, $response_headers, true);
 }
 function http_get($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
 {
@@ -36,7 +36,7 @@ function http_get($url, $data = [], $headers = [], &$response_headers = [], $ret
 }
 function http_post_stream($url, $data = [], $headers = [], &$response_headers = [])
 {
-    return http_post($url, $data, $headers, &$response_headers, true);
+    return http_post($url, $data, $headers, $response_headers, true);
 }
 function http_post($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
 {
