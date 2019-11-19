@@ -4,18 +4,34 @@ use Exception;
 
 class HttpException extends Exception
 {
-    protected $request_context;
+    protected $method;
 
-    function __construct($request_context, string $message = null, Throwable $previous = null)
+    protected $request_data;
+
+    protected $request_headers;
+
+    function __construct($method, $request_data, $request_headers, string $message = null, Throwable $previous = null)
     {
         if(empty($message)) $message = 'HTTP Exception';
 
-        $this->request_context = $request_context;
+        $this->method = $method;
+
+        $this->request_data = $request_data;
+
+        $this->request_headers = $request_headers;
 
         parent::__construct($message, 0, $previous);
     }
-    function getRequestContext()
+    function getMethod()
     {
-        return $this->request_context;
+        return $this->method;
+    }
+    function getRequestData()
+    {
+        return $this->request_data;
+    }
+    function getRequestHeaders()
+    {
+        return $this->request_headers;
     }
 }

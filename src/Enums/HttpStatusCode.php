@@ -148,6 +148,6 @@ abstract class HttpStatusCode
     }
     public static function isServerError($status_code)
     {
-        return $status_code >= 400 && $status_code <= 499;
+        return $status_code >= 500 && $status_code <= 599;
     }
 }

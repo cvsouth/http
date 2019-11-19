@@ -12,13 +12,11 @@ use Cvsouth\Http\Exceptions\ClientErrorResponseException;
 
 use Cvsouth\Http\Exceptions\ServerErrorResponseException;
 
-function http_get($url, $headers = [], &$response_headers = [], $throw_exceptions = true, $return_stream = false)
+function http_get($url, $headers = [], &$response_headers = [], $return_stream = false)
 {
-    $context = http_context('GET', null, $headers);
-
-    return http_response($url, $context, $throw_exceptions, $return_stream, $response_headers);
+    return http_response($url, 'GET', null, $headers, $return_stream, $response_headers);
 }
-function http_post($url, $data = [], $headers = [], &$response_headers = [], $throw_exceptions = true, $return_stream = false)
+function http_post($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
 {
     $data = http_build_query($data);
 
@@ -30,63 +28,65 @@ function http_post($url, $data = [], $headers = [], &$response_headers = [], $th
     ],
     $headers);
 
-    $context = http_context('POST', $data, $headers);
-
-    return http_response($url, $context, $throw_exceptions, $return_stream, $response_headers);
+    return http_response($url, 'POST', $data, $headers, $return_stream, $response_headers);
 }
-function http_response($url, $context, $throw_exceptions, $return_stream, &$response_headers)
+function http_response($url, $method, $data, $headers, $return_stream, &$response_headers)
 {
+    $context = http_context($method, $data, $headers);
+
     try
     {
         $response = fopen($url, 'r', false, $context);
     }
     catch(Exception $e)
     {
-        $message = str_replace('fopen(): ', '', $e->getMessage()) . ' (' . $url . ')';
+        $message = str_replace('HTTP/1.0', 'HTTP/1.1', $e->getMessage());
 
-        throw new RequestException($context, $message);
+        if(($position = strpos($message, 'HTTP/1.1 ')) !== false)
+        {
+            list($status_code) = explode(' ', substr($message, $position + 9), 2);
+
+            $status_code = (int) trim($status_code);
+
+            $response_headers = [];
+
+            $message = substr($e->getMessage(), $position);
+
+            if(HttpStatusCode::isInformational($status_code))
+
+                throw new InformationalResponseException($method, $data, $headers, $status_code, $response_headers, $message);
+
+            elseif(HttpStatusCode::isRedirection($status_code))
+
+                throw new RedirectionResponseException($method, $data, $headers, $status_code, $response_headers, $message);
+
+            elseif(HttpStatusCode::isClientError($status_code))
+
+                throw new ClientErrorResponseException($method, $data, $headers, $status_code, $response_headers, $message);
+
+            elseif(HttpStatusCode::isServerError($status_code))
+
+                throw new ServerErrorResponseException($method, $data, $headers, $status_code, $response_headers, $message);
+        }
+        throw new RequestException($method, $data, $headers, $message);
     }
     if($response === false)
-    {
-        if($throw_exceptions)
 
-            throw new RequestException($context, 'Unreachable (' . $url . ')');
-
-        else return false;
-    }
+        throw new RequestException($method, $data, $headers, 'Unreachable (' . $url . ')');
+    
     $response_headers = http_response_headers($response);
 
-    if($throw_exceptions)
-    {
-        $status_code = http_response_status($response_headers);
-
-        if(HttpStatusCode::isInformational($status_code))
-
-            throw new InformationalResponseException($context, $status_code, $response_headers);
-
-        elseif(HttpStatusCode::isRedirection($status_code))
-
-            throw new RedirectionResponseException($context, $status_code, $response_headers);
-
-        elseif(HttpStatusCode::isClientError($status_code))
-
-            throw new ClientErrorResponseException($context, $status_code, $response_headers);
-
-        elseif(HttpStatusCode::isServerError($status_code))
-
-            throw new ServerErrorResponseException($context, $status_code, $response_headers);
-    }
     if($return_stream) return $response;
 
     else return stream_get_contents($response);
 }
-function http_get_stream($url, $headers = [], &$response_headers = [], $throw_exceptions = true)
+function http_get_stream($url, $headers = [], &$response_headers = [])
 {
-    return http_get($url, $headers, $response_headers, $throw_exceptions, true);
+    return http_get($url, $headers, $response_headers);
 }
-function http_post_stream($url, $data = [], $headers = [], &$response_headers = [], $throw_exceptions = true)
+function http_post_stream($url, $data = [], $headers = [], &$response_headers = [])
 {
-    return http_post($url, $data, $headers, $response_headers, $throw_exceptions, true);
+    return http_post($url, $data, $headers, $response_headers);
 }
 function http_get_url($url, $data = [])
 {
