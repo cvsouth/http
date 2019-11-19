@@ -36,8 +36,16 @@ function http_post($url, $data = [], $headers = [], &$response_headers = [], $th
 }
 function http_response($url, $context, $throw_exceptions, $return_stream, &$response_headers)
 {
-    $response = fopen($url, 'r', false, $context);
-    
+    try
+    {
+        $response = fopen($url, 'r', false, $context);
+    }
+    catch(Exception $e)
+    {
+        $message = str_replace('fopen(): ', '', $e->getMessage()) . ' (' . $url . ')';
+
+        throw new RequestException($context, $message);
+    }
     if($response === false)
     {
         if($throw_exceptions)
