@@ -16,7 +16,7 @@ function http_get_url($url, $data = [])
 
     else return $url_parts[0];
 }
-function http_get_stream($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
+function http_get_stream($url, $data = [], $headers = [], &$response_headers = [])
 {
     return http_get($url, $data, $headers, $response_headers, true);
 }
@@ -86,7 +86,7 @@ function http_response_headers($response_stream)
 }
 function http_context($method, $data = [], $headers = [])
 {
-    $http = ['method'  => $method, 'header'  => implode("\r\n", $headers)];
+    $http = ['method' => $method, 'header' => implode("\r\n", $headers)];
 
     if(!empty($data)) $http['content'] = $data;
 
