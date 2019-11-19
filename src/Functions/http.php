@@ -56,15 +56,13 @@ function http_post($url, $data = [], $headers = [], &$response_headers = [], $re
 
     $response_headers = http_response_headers($response);
     
-    $response_status = http_response_status($response_headers);
-
     if($return_stream) return $response;
 
     else return stream_get_contents($response);
 }
 function http_response_status($response_headers, &$status = null)
 {
-    foreach ($response as $key => $r)
+    foreach ($response_headers as $key => $r)
 
         if(stripos($r, 'HTTP/1.1') === 0 || stripos($r, 'HTTP/1.0') === 0)
         {
