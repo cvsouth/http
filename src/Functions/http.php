@@ -1,5 +1,87 @@
 <?php
 
+use Cvsouth\Http\Enums\HttpStatusCode;
+
+use Cvsouth\Http\Exceptions\RequestException;
+
+use Cvsouth\Http\Exceptions\InformationalResponseException;
+
+use Cvsouth\Http\Exceptions\RedirectionResponseException;
+
+use Cvsouth\Http\Exceptions\ClientErrorResponseException;
+
+use Cvsouth\Http\Exceptions\ServerErrorResponseException;
+
+function http_get($url, $headers = [], &$response_headers = [], $throw_exceptions = true, $return_stream = false)
+{
+    $url = http_get_url($url, $data);
+
+    $context = http_context('GET', null, $headers);
+
+    return http_response($response, $throw_exceptions, $return_stream);
+}
+function http_post($url, $data = [], $headers = [], &$response_headers = [], $throw_exceptions = true, $return_stream = false)
+{
+    $data = http_build_query($data);
+
+    $headers = array_merge(
+    [
+        'Content-Type: application/x-www-form-urlencoded',
+
+        'Content-Length: ' . strlen($data),
+    ],
+    $headers);
+
+    $context = http_context('POST', $data, $headers);
+
+    return http_response($response, $throw_exceptions, $return_stream);
+}
+function http_response($response, $throw_exceptions, $return_stream)
+{
+    $response = fopen($url, 'r', false, $context);
+    
+    if($response === false)
+    {
+        if($throw_exceptions)
+
+            throw new RequestException($context, 'Unreachable (' . $url . ')');
+
+        else return false;
+    }
+    $response_headers = http_response_headers($response);
+
+    if($throw_exceptions)
+    {
+        $status_code = http_response_status($response_headers)
+
+        if(HttpStatusCode::isInformational($status_code))
+
+            throw new InformationalResponseException($context, $status_code, $response_headers);
+
+        elseif(HttpStatusCode::isRedirection($status_code))
+
+            throw new RedirectionResponseException($context, $status_code, $response_headers);
+
+        elseif(HttpStatusCode::isClientError($status_code))
+
+            throw new ClientErrorResponseException($context, $status_code, $response_headers);
+
+        elseif(HttpStatusCode::isServerError($status_code))
+
+            throw new ServerErrorResponseException($context, $status_code, $response_headers);
+    }
+    if($return_stream) return $response;
+
+    else return stream_get_contents($response);
+}
+function http_get_stream($url, $data = [], $headers = [], &$response_headers = [], $throw_exceptions = true)
+{
+    return http_get($url, $data, $headers, $response_headers, $throw_exceptions, true);
+}
+function http_post_stream($url, $data = [], $headers = [], &$response_headers = [], $throw_exceptions = true)
+{
+    return http_post($url, $data, $headers, $response_headers, $throw_exceptions, true);
+}
 function http_get_url($url, $data = [])
 {
     $url_parts = explode('?', $url, 2);
@@ -15,50 +97,6 @@ function http_get_url($url, $data = [])
         return $url_parts[0] . '?' . http_build_query($query);
 
     else return $url_parts[0];
-}
-function http_get_stream($url, $data = [], $headers = [], &$response_headers = [])
-{
-    return http_get($url, $data, $headers, $response_headers, true);
-}
-function http_get($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
-{
-    $url = http_get_url($url, $data);
-
-    $context = http_context('GET', null, $headers);
-
-    $response = fopen($url, 'r', false, $context);
-
-    $response_headers = http_response_headers($response);
-
-    if($return_stream) return $response;
-
-    else return stream_get_contents($response);
-}
-function http_post_stream($url, $data = [], $headers = [], &$response_headers = [])
-{
-    return http_post($url, $data, $headers, $response_headers, true);
-}
-function http_post($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
-{
-    $data = http_build_query($data);
-
-    $headers = array_merge(
-    [
-        'Content-Type: application/x-www-form-urlencoded',
-
-        'Content-Length: ' . strlen($data),
-    ],
-    $headers);
-
-    $context = http_context('POST', $data, $headers);
-
-    $response = fopen($url, 'r', false, $context);
-
-    $response_headers = http_response_headers($response);
-    
-    if($return_stream) return $response;
-
-    else return stream_get_contents($response);
 }
 function http_response_status($response_headers, &$status = null)
 {
