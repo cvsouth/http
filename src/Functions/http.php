@@ -82,11 +82,11 @@ function http_response($url, $method, $data, $headers, $return_stream, &$respons
 }
 function http_get_stream($url, $headers = [], &$response_headers = [])
 {
-    return http_get($url, $headers, $response_headers);
+    return http_get($url, $headers, $response_headers, true);
 }
 function http_post_stream($url, $data = [], $headers = [], &$response_headers = [])
 {
-    return http_post($url, $data, $headers, $response_headers);
+    return http_post($url, $data = [], $headers, $response_headers, true);
 }
 function http_get_url($url, $data = [])
 {
