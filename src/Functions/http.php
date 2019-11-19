@@ -14,11 +14,9 @@ use Cvsouth\Http\Exceptions\ServerErrorResponseException;
 
 function http_get($url, $headers = [], &$response_headers = [], $throw_exceptions = true, $return_stream = false)
 {
-    $url = http_get_url($url, $data);
-
     $context = http_context('GET', null, $headers);
 
-    return http_response($response, $throw_exceptions, $return_stream);
+    return http_response($url, $context, $throw_exceptions, $return_stream, $response_headers);
 }
 function http_post($url, $data = [], $headers = [], &$response_headers = [], $throw_exceptions = true, $return_stream = false)
 {
@@ -34,9 +32,9 @@ function http_post($url, $data = [], $headers = [], &$response_headers = [], $th
 
     $context = http_context('POST', $data, $headers);
 
-    return http_response($response, $throw_exceptions, $return_stream);
+    return http_response($url, $context, $throw_exceptions, $return_stream, $response_headers);
 }
-function http_response($response, $throw_exceptions, $return_stream)
+function http_response($url, $context, $throw_exceptions, $return_stream, &$response_headers)
 {
     $response = fopen($url, 'r', false, $context);
     
@@ -74,9 +72,9 @@ function http_response($response, $throw_exceptions, $return_stream)
 
     else return stream_get_contents($response);
 }
-function http_get_stream($url, $data = [], $headers = [], &$response_headers = [], $throw_exceptions = true)
+function http_get_stream($url, $headers = [], &$response_headers = [], $throw_exceptions = true)
 {
-    return http_get($url, $data, $headers, $response_headers, $throw_exceptions, true);
+    return http_get($url, $headers, $response_headers, $throw_exceptions, true);
 }
 function http_post_stream($url, $data = [], $headers = [], &$response_headers = [], $throw_exceptions = true)
 {
