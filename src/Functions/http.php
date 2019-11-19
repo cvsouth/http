@@ -16,7 +16,7 @@ function http_get_url($url, $data = [])
 
     else return $url_parts[0];
 }
-function http_get_stream($url, $data = [], $headers = [], &$response_headers = [])
+function http_get_stream($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
 {
     return http_get($url, $data, $headers, $response_headers, true);
 }
@@ -55,10 +55,24 @@ function http_post($url, $data = [], $headers = [], &$response_headers = [], $re
     $response = fopen($url, 'r', false, $context);
 
     $response_headers = http_response_headers($response);
+    
+    $response_status = http_response_status($response_headers);
 
     if($return_stream) return $response;
 
     else return stream_get_contents($response);
+}
+function http_response_status($response_headers, &$status = null)
+{
+    foreach ($response as $key => $r)
+
+        if(stripos($r, 'HTTP/1.1') === 0 || stripos($r, 'HTTP/1.0') === 0)
+        {
+            list(,$code, $status) = explode(' ', $r, 3);
+            
+            return $code;
+        }
+    return null;
 }
 function http_response_headers($response_stream)
 {
@@ -72,7 +86,7 @@ function http_response_headers($response_stream)
 }
 function http_context($method, $data = [], $headers = [])
 {
-    $http = ['method' => $method, 'header'  => implode("\r\n", $headers)];
+    $http = ['method'  => $method, 'header'  => implode("\r\n", $headers)];
 
     if(!empty($data)) $http['content'] = $data;
 
@@ -102,13 +116,7 @@ function forward_http_headers($headers)
 
         if(count($parts) <= 1) continue;
 
-        if(in_array($parts[0],
-            [
-                'Server',
-
-                'Date',
-            ]))
-            continue;
+        if(in_array($parts[0], ['Server', 'Date'])) continue;
 
         header($header);
     }
