@@ -52,7 +52,7 @@ function http_response($response, $throw_exceptions, $return_stream)
 
     if($throw_exceptions)
     {
-        $status_code = http_response_status($response_headers)
+        $status_code = http_response_status($response_headers);
 
         if(HttpStatusCode::isInformational($status_code))
 
