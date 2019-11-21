@@ -37,6 +37,13 @@ function http_response($url, $method, $data, $headers, $return_stream, &$respons
     try
     {
         $response = fopen($url, 'r', false, $context);
+
+        if($response === false)
+        {
+            $error = error_get_last();
+
+            throw new RequestException($method, $data, $headers, $error['message']);
+        }
     }
     catch(Exception $e)
     {
@@ -50,7 +57,7 @@ function http_response($url, $method, $data, $headers, $return_stream, &$respons
 
             $response_headers = [];
 
-            $message = substr($e->getMessage(), $position);
+            $message = substr($e->getMessage(), $position) . '[' . $url . ']';
 
             if(HttpStatusCode::isInformational($status_code))
 
@@ -70,10 +77,6 @@ function http_response($url, $method, $data, $headers, $return_stream, &$respons
         }
         throw new RequestException($method, $data, $headers, $message);
     }
-    if($response === false)
-
-        throw new RequestException($method, $data, $headers, 'Unreachable (' . $url . ')');
-    
     $response_headers = http_response_headers($response);
 
     if($return_stream) return $response;
@@ -111,7 +114,7 @@ function http_response_status($response_headers, &$status = null)
         if(stripos($r, 'HTTP/1.1') === 0 || stripos($r, 'HTTP/1.0') === 0)
         {
             list(,$code, $status) = explode(' ', $r, 3);
-            
+
             return $code;
         }
     return null;
