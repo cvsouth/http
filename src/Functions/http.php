@@ -129,6 +129,20 @@ function http_response_headers($response_stream)
 
     else return null;
 }
+function http_response_header($name, $response_stream)
+{
+    $headers = http_response_headers($response_stream);
+    
+    if(empty($headers)) return false;
+
+    foreach($headers as $header)
+    {
+        $strpos = strpos(strtolower($header), strtolower($name) . ':');
+
+        if($strpos === 0) return trim(substr($header, mb_strlen($name) + 1));
+    }
+    return null;
+}
 function http_context($method, $data = [], $headers = [])
 {
     $http = ['method' => $method, 'header' => implode("\r\n", $headers)];
