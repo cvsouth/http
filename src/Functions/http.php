@@ -18,12 +18,20 @@ function http_get($url, $headers = [], &$response_headers = [], $return_stream =
 }
 function http_post($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
 {
-    $data = http_build_query($data);
+    if(empty($data)) $data = [];
+    
+    if(is_array($data))
+    {
+        $data = http_build_query($data);
 
+        $headers = array_merge(
+        [
+            'Content-Type: application/x-www-form-urlencoded',
+        ],
+        $headers);
+    }
     $headers = array_merge(
     [
-        'Content-Type: application/x-www-form-urlencoded',
-
         'Content-Length: ' . strlen($data),
     ],
     $headers);
