@@ -49,23 +49,14 @@ You can specify additional request headers by passing them as an associative arr
 
 ```php
 $response = http_get($url, ['Pragma' => 'no-cache']);
+// or
+$stream = http_get_stream($url, ['Pragma' => 'no-cache']);
 ```
 #### POST
 
 ```php
 $response = http_get($url, ['key' => 'value'], ['Pragma' => 'no-cache']);
-```
-
-This works exactly the same with the stream functions:
-
-#### GET (Stream)
-
-```php
-$stream = http_get_stream($url, ['Pragma' => 'no-cache']);
-```
-#### POST (Stream)
-
-```php
+// or
 $stream = http_get_stream($url, ['key' => 'value'], ['Pragma' => 'no-cache']);
 ```
 
