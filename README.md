@@ -14,13 +14,19 @@ composer require cvsouth/http
 
 #### GET
 
+The package makes basic HTTP request ultra simple:
+
 ```php
 $response = http_get($url);
 ```
 #### POST
 
+You can pass either a string to the POST request for data or an associative array which will be encoded as form data:
+
 ```php
-$response = http_get($url, ['key' => 'value']);
+$response = http_post($url, 'data');
+// or
+$response = http_post($url, ['key' => 'value']);
 ```
 
 ### Stream Response
