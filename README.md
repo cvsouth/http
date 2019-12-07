@@ -21,7 +21,7 @@ $response = http_get($url);
 ```
 #### POST
 
-You can pass either a string to the POST request for data or an associative array which will be encoded as form data:
+For POST data you can either pass raw string data or an associative array to be encoded as form data:
 
 ```php
 $response = http_post($url, 'data');
