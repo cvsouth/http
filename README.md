@@ -30,7 +30,7 @@ $response = http_get($url, ['key' => 'value']);
 ```php
 $stream = http_get_stream($url);
 
-$response = stream_get_contents($stream); // etc
+// do something with the stream...
 ```
 
 #### POST
@@ -38,7 +38,7 @@ $response = stream_get_contents($stream); // etc
 ```php
 $stream = http_post_stream($url, ['key' => 'value']);
 
-$response = stream_get_contents($stream); // etc
+// do something with the stream...
 ```
 
 ### Specifying Additional Headers
