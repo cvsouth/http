@@ -1,6 +1,6 @@
 # HTTP
 
-This package provides HTTP requests in pure PHP, without any additional dependencies such as ext-curl or over-engineered solutions such as Guzzle, and makes handling Exceptions simple too.
+This package provides HTTP requests in pure PHP, without any additional dependencies such as ext-curl or over-engineered solutions like Guzzle, and makes handling Exceptions simple too.
 
 ## Installation
 
