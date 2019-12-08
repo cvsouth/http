@@ -56,6 +56,7 @@ You can specify additional request headers by passing them as an associative arr
 ```php
 $response = http_get($url, ['Pragma' => 'no-cache']);
 ```
+
 ```php
 $stream = http_get_stream($url, ['Pragma' => 'no-cache']);
 ```
@@ -64,6 +65,7 @@ $stream = http_get_stream($url, ['Pragma' => 'no-cache']);
 ```php
 $response = http_post($url, ['key' => 'value'], ['Pragma' => 'no-cache']);
 ```
+
 ```php
 $stream = http_post_stream($url, ['key' => 'value'], ['Pragma' => 'no-cache']);
 ```
@@ -95,6 +97,7 @@ $response = http_post($url, ['key' => 'value'], null, $response_headers);
 
 print_r($response_headers);
 ```
+
 ```php
 $stream = http_post_stream($url, ['key' => 'value'], null, $response_headers);
 
@@ -112,7 +115,8 @@ $response = http_get($url, null, $response_headers);
 
 $content_type = http_response_header('Content-Type', $response_headers);
 ```
-php```
+
+```php
 $response = http_get_stream($url);
 
 $content_type = http_response_header('Content-Type', $stream);
