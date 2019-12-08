@@ -80,16 +80,7 @@ $response = http_get($url, null, $response_headers);
 print_r($response_headers);
 ```
 
-#### POST
-
-```php
-$response = http_post($url, ['key' => 'value'], null, $response_headers);
-
-print_r($response_headers);
-```
 Using streams you can access the response headers before doing anything with the stream:
-
-#### GET
 
 ```php
 $stream = http_get_stream($url, null, $response_headers);
@@ -101,6 +92,11 @@ print_r($response_headers);
 
 #### POST
 
+```php
+$response = http_post($url, ['key' => 'value'], null, $response_headers);
+
+print_r($response_headers);
+```
 ```php
 $stream = http_post_stream($url, ['key' => 'value'], null, $response_headers);
 
