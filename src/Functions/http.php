@@ -40,6 +40,8 @@ function http_post($url, $data = [], $headers = [], &$response_headers = [], $re
 }
 function http_response($url, $method, $data, $headers, $return_stream, &$response_headers)
 {
+    if(empty($headers)) $headers = [];
+    
     $context = http_context($method, $data, $headers);
 
     try
