@@ -150,7 +150,9 @@ forward_http_post($url, ['key' => 'value']);
 
 ### Handling Exceptions
 
-If any exceptions occur during HTTP request a HttpException will be thrown with of either sub-type RequestException or ResponseException. RequestException means there was something wrong with your request and you may get this if the url you are requesting from does not exist. ResponseException denotes that a status other than 200 was received and may of type InformationalResponseException, RedirectionResponseException, ClientErrorResponseException, ServerErrorResponseException. The RequestException object has the methods `getMethod()`, `getRequestData()` and `getRequestHeaders()`. The ResponseException object also has these methods and in addition it has `getResponseStatusCode()` and `getResponseHeaders()`. It is up to you to decide how specific you want your error catching to be:
+If any exceptions occur during HTTP request a HttpException will be thrown with of either sub-type RequestException or ResponseException. RequestException means there was something wrong with your request and you may get this if the url you are requesting does not exist. ResponseException denotes that a status other than 200 was received and may of type `InformationalResponseException`, `RedirectionResponseException`, `ClientErrorResponseException`, `ServerErrorResponseException`.
+
+The RequestException object has the methods `getMethod()`, `getRequestData()` and `getRequestHeaders()`. The ResponseException object also has these methods and in addition it has `getResponseStatusCode()` and `getResponseHeaders()`. It is up to you to decide how specific you want your error catching to be:
 
 ```php
 try
