@@ -161,9 +161,9 @@ function http_context($method, $data = [], $headers = [])
 
     return stream_context_create(['http' => $http]);
 }
-function forward_http_get($url, $data = [], $headers = [], &$response_headers = [])
+function forward_http_get($url, $headers = [], &$response_headers = [])
 {
-    $stream = http_get_stream($url, $data, $headers, $response_headers);
+    $stream = http_get_stream($url, $headers, $response_headers);
 
     forward_http_headers($response_headers);
 
