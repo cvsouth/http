@@ -159,10 +159,6 @@ try
 }
 catch(HttpException $e)
 {
-  $method = $e->getMethod();
-  $request_data = $e->getRequestData();
-  $request_headers = $e->getRequestHeaders();
-  
   // if anything goes wrong...
 }
 ```
