@@ -55,20 +55,59 @@ You can specify additional request headers by passing them as an associative arr
 
 ```php
 $response = http_get($url, ['Pragma' => 'no-cache']);
-// or
+```
+```php
 $stream = http_get_stream($url, ['Pragma' => 'no-cache']);
 ```
 #### POST
 
 ```php
-$response = http_get($url, ['key' => 'value'], ['Pragma' => 'no-cache']);
-// or
-$stream = http_get_stream($url, ['key' => 'value'], ['Pragma' => 'no-cache']);
+$response = http_post($url, ['key' => 'value'], ['Pragma' => 'no-cache']);
+```
+```php
+$stream = http_post_stream($url, ['key' => 'value'], ['Pragma' => 'no-cache']);
 ```
 
 ### Reading Response Headers
 
+You can access the response headers through a reference parameter as key value pairs in an associative array:
 
+#### GET
+
+```php
+$response = http_get($url, null, $response_headers);
+
+print_r($response_headers);
+```
+
+#### POST
+
+```php
+$response = http_post($url, ['key' => 'value'], null, $response_headers);
+
+print_r($response_headers);
+```
+Using streams you can access the response headers before doing anything with the stream:
+
+#### GET
+
+```php
+$stream = http_get_stream($url, null, $response_headers);
+
+print_r($response_headers);
+
+// do something with the stream...
+```
+
+#### POST
+
+```php
+$stream = http_post_stream($url, ['key' => 'value'], null, $response_headers);
+
+print_r($response_headers);
+
+// do something with the stream...
+```
 
 ### Response Download
 
