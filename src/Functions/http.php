@@ -139,9 +139,9 @@ function http_response_headers($response_stream)
 
     else return null;
 }
-function http_response_header($name, $response_stream)
+function http_response_header($name, $headers)
 {
-    $headers = http_response_headers($response_stream);
+    if(is_resource($headers)) $headers = http_response_headers($headers);
     
     if(empty($headers)) return false;
 
