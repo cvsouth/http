@@ -80,8 +80,6 @@ $response = http_get($url, null, $response_headers);
 print_r($response_headers);
 ```
 
-Using streams you can access the response headers before doing anything with the stream:
-
 ```php
 $stream = http_get_stream($url, null, $response_headers);
 
@@ -110,9 +108,16 @@ print_r($response_headers);
 You can also access specific response headers using `http_response_header`. The first parameter takes the header name (case insensitive). The second parameter is the array of headers or you can pass a stream:
 
 ```php
+$response = http_get($url, null, $response_headers);
+
 $content_type = http_response_header('Content-Type', $response_headers);
-// or
+```
+php```
+$response = http_get_stream($url);
+
 $content_type = http_response_header('Content-Type', $stream);
+
+// do something with stream...
 ```
 
 ### Response Download
