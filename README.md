@@ -176,7 +176,7 @@ catch(HttpException $e)
 ```php
 try
 {
-  $response = http_get($bad_url);
+  $response = http_get($url);
 }
 catch(RequestException $e)
 {
