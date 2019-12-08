@@ -159,6 +159,10 @@ try
 }
 catch(HttpException $e)
 {
+  $method = $e->getMethod();
+  $request_data = $e->getRequestData();
+  $request_headers = $e->getRequestHeaders();
+  
   // if anything goes wrong...
 }
 ```
@@ -169,10 +173,18 @@ try
 }
 catch(RequestException $e)
 {
+  $method = $e->getMethod();
+  $request_data = $e->getRequestData();
+  $request_headers = $e->getRequestHeaders();
+  
   // handle request exception...
 }
 catch(ResponseException $e)
 {
+  $method = $e->getMethod();
+  $request_data = $e->getRequestData();
+  $request_headers = $e->getRequestHeaders();
+  
   $status_code = $e->getResponseStatusCode();
   $response_headers = $e->getResponseHeaders();
   
