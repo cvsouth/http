@@ -5,7 +5,7 @@ This package provides HTTP requests in pure PHP, without any additional dependen
 ## Installation
 
 ```bash
-composer require cvsouth/http2
+composer require cvsouth/http
 ```
 
 ## Usage
