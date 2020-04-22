@@ -190,11 +190,11 @@ function forward_http_headers($headers)
         header($header);
     }
 }
-function http_download_headers($name, $mime, $size)
+function http_download_headers($name, $mime = null, $size = null)
 {
     header('Content-Description: File Transfer');
 
-    header("Content-Type: " . $mime);
+    if(!empty($mime)) header("Content-Type: " . $mime);
 
     header('Content-Disposition: attachment; filename="' . $name . '"');
 
@@ -208,5 +208,5 @@ function http_download_headers($name, $mime, $size)
 
     header('Pragma: public');
 
-    header("Content-Length: " . $size);
+    if(!empty($size)) header("Content-Length: " . $size);
 }
