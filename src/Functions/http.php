@@ -11,6 +11,7 @@ use Cvsouth\Http\Exceptions\RedirectionResponseException;
 use Cvsouth\Http\Exceptions\ClientErrorResponseException;
 
 use Cvsouth\Http\Exceptions\ServerErrorResponseException;
+use Illuminate\Support\Str;
 
 function http_get($url, $headers = [], &$response_headers = [], $return_stream = false)
 {
@@ -19,7 +20,7 @@ function http_get($url, $headers = [], &$response_headers = [], $return_stream =
 function http_post($url, $data = [], $headers = [], &$response_headers = [], $return_stream = false)
 {
     if(empty($data)) $data = [];
-    
+
     if(is_array($data))
     {
         $data = http_build_query($data);
@@ -41,7 +42,7 @@ function http_post($url, $data = [], $headers = [], &$response_headers = [], $re
 function http_response($url, $method, $data, $headers, $return_stream, &$response_headers)
 {
     if(empty($headers)) $headers = [];
-    
+
     $context = http_context($method, $data, $headers);
 
     try
@@ -142,7 +143,7 @@ function http_response_headers($response_stream)
 function http_response_header($name, $headers)
 {
     if(is_resource($headers)) $headers = http_response_headers($headers);
-    
+
     if(empty($headers)) return false;
 
     foreach($headers as $header)
@@ -209,4 +210,41 @@ function http_download_headers($name, $mime = null, $size = null)
     header('Pragma: public');
 
     if(!empty($size)) header("Content-Length: " . $size);
+}
+function response_cookie($response_headers, $cookie = [], $return_as_string = true)
+{
+    if(is_string($cookie))
+    {
+        $cookie = explode("; ", $cookie);
+
+        foreach($cookie as $i => $cookie_)
+        {
+            unset($cookie[$i]);
+            
+            $parts = explode('=', $cookie_, 2);
+
+            $cookie[$parts[0]] = $parts[1];
+        }
+    }
+    foreach($response_headers as $response_header)
+    
+        if(Str::startsWith(mb_strtolower($response_header), 'set-cookie: '))
+        {
+            $cookie_ = substr($response_header, 12, mb_strpos($response_header, '; ') - 12);
+
+            $parts = explode('=', $cookie_, 2);
+
+            $cookie[$parts[0]] = $parts[1];
+        }
+    if($return_as_string)
+    {
+        foreach($cookie as $name => $value)
+        {
+            unset($cookie[$name]);
+
+            $cookie[] = $name . '=' . $value;
+        }
+        $cookie = implode("; ", $cookie);
+    }
+    return $cookie;
 }
