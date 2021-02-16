@@ -4,8 +4,6 @@
     "description": "Simple HTTP requests using pure PHP",
 
     "require": {
-
-        "php": "^7.1"
     },
     "license": "proprietary",
 
